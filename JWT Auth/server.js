@@ -1,0 +1,81 @@
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+require("dotenv").config();
+const cors = require("cors");
+
+const app = express();
+const PORT = process.env.PORT || 6200;
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
+
+const JWT_SECRET_KEY = process.env.JWT_SECRET || "12345abcde";
+
+app.use(express.json());
+
+const registeredUsers = [];
+
+//Routes
+
+app.post("/register", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ message: "Invalid username/password" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = { username, hashedPassword, id: Date.now() };
+    registeredUsers.push(newUser);
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error during registration" });
+    console.log(error);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const userFound = registeredUsers.find((user) => user.username === username);
+  if (
+    !userFound ||
+    !(await bcrypt.compare(password, userFound.hashedPassword))
+  ) {
+    return res.status(401).json({ message: "password or username invalid" });
+  }
+
+  const token = jwt.sign({ username: userFound.username }, JWT_SECRET_KEY, {
+    expiresIn: "1h",
+  });
+  return res.status(200).json({ token, message: "Login successful" });
+});
+
+//middleware to verify JWT
+function verifyToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) return res.status(401).json({ message: "Token missing" });
+
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, JWT_SECRET_KEY, (err, user) => {
+    if (err) return res.status(403).json({ message: "Invalid Token" });
+
+    req.user = user;
+    next();
+  });
+}
+
+app.get("/users", verifyToken, (req, res) => {
+  const safeUser = registeredUsers.map((user) => ({
+    username: user.username,
+  }));
+
+  res.json({ users: safeUser });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is listening to port http://localhost:${PORT}`);
+});
