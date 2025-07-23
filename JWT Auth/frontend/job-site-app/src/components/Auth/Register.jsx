@@ -26,7 +26,7 @@ function Register() {
                 <input type="text" placeholder='Username' value={registrationData.username}
                     onChange={e => setRegistrationData({ ...registrationData, username: e.target.value })} required />
 
-                <input type="text" placeholder='Password' value={registrationData.password}
+                <input type="password" placeholder='Password' value={registrationData.password}
                     onChange={e => setRegistrationData({ ...registrationData, password: e.target.value })} required />
 
                 <button type='submit'>Register</button>

@@ -1,8 +1,9 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 const cors = require("cors");
+const mongoose = require("mongoose");
+const verifyToken = require("./middleware/auth");
 
 const app = express();
 const PORT = process.env.PORT || 6200;
@@ -15,6 +16,10 @@ app.use(
 const JWT_SECRET_KEY = process.env.JWT_SECRET || "12345abcde";
 
 app.use(express.json());
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("DB Connected"))
+  .catch((err) => console.error("DB Error", err));
 
 const registeredUsers = [];
 
@@ -52,21 +57,6 @@ app.post("/login", async (req, res) => {
   });
   return res.status(200).json({ token, message: "Login successful" });
 });
-
-//middleware to verify JWT
-function verifyToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  if (!authHeader) return res.status(401).json({ message: "Token missing" });
-
-  const token = authHeader.split(" ")[1];
-
-  jwt.verify(token, JWT_SECRET_KEY, (err, user) => {
-    if (err) return res.status(403).json({ message: "Invalid Token" });
-
-    req.user = user;
-    next();
-  });
-}
 
 app.get("/users", verifyToken, (req, res) => {
   const safeUser = registeredUsers.map((user) => ({

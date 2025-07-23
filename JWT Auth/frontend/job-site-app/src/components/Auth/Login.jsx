@@ -33,7 +33,7 @@ function Login() {
 
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder='Username' value={loginData.username} onChange={e => setLoginData({ ...loginData, username: e.target.value })} required />
-                <input type="text" placeholder='Password' value={loginData.password} onChange={e => setLoginData({ ...loginData, password: e.target.value })} required />
+                <input type="password" placeholder='Password' value={loginData.password} onChange={e => setLoginData({ ...loginData, password: e.target.value })} required />
 
                 <button type='submit'>Login</button>
 
