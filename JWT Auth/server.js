@@ -1,9 +1,11 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const verifyToken = require("./middleware/auth");
+const jobRoutes = require("./routes/jobs");
 
 const app = express();
 const PORT = process.env.PORT || 6200;
@@ -16,10 +18,11 @@ app.use(
 const JWT_SECRET_KEY = process.env.JWT_SECRET || "12345abcde";
 
 app.use(express.json());
+app.use("/jobs", jobRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("DB Connected"))
-  .catch((err) => console.error("DB Error", err));
+  .then(() => console.log("✅ Connected to MongoDB Atlas"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 const registeredUsers = [];
 
