@@ -30,9 +30,9 @@ function JobForm({ editJob, onComplete }) {
                 <input type="date" placeholder='Date' value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
                 <textarea type="text" placeholder='Notes' value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
 
-                <select value={form.status} onChange={e => { setForm({ ...form, status: e.target.value }); console.log(e.target.value) }}>
+                <select value={form.status} onChange={e => { setForm({ ...form, status: e.target.value }) }}>
                     <option value='applied'>Applied</option>
-                    <option value='interview'>Interview</option>
+                    <option value='interviewed'>Interviewed</option>
                     <option value='offer'>Offer</option>
                     <option value='rejected'>Rejected</option>
                 </select>

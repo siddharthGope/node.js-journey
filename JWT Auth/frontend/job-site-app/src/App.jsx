@@ -12,6 +12,8 @@ function App() {
     <>
       <Router>
         <nav>
+          <Link to="/jobs">See all jobs</Link>
+          <Link to="/dashboard">Dashboard</Link>
           <Link to="/">Register</Link> |
           <Link to="/login">Login</Link>
           <button onClick={() => logOut()}>Log out</button>

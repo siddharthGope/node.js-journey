@@ -30,7 +30,7 @@ function JobList() {
             <ul>
                 {jobs.map(job => (
                     <li key={job._id}>
-                        <strong>{job.title}</strong> @ {job.company} ({job.status})
+                        <strong>{job.title}</strong> @ {job.company} ({job.status}) - {job.date} - {job.notes}
 
                         <button onClick={() => setEditing(job)}>Edit</button>
                         <button onClick={() => handleDelete(job._id)}>Delete</button>

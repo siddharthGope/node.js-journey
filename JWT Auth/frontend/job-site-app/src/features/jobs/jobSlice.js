@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 const BASE_URL = "http://localhost:6200/jobs";
@@ -97,3 +101,24 @@ const jobSlice = createSlice({
 });
 
 export default jobSlice.reducer;
+
+export const selectJobs = (state) => state.jobs.jobs;
+
+//count by status
+export const selectJobsByStatus = createSelector([selectJobs], (jobs) => {
+  const counts = {};
+  for (const job of jobs) {
+    counts[job.status] = (counts[job.status] || 0) + 1;
+  }
+  return counts;
+});
+
+// Count by date
+export const selectJobsByDate = createSelector([selectJobs], (jobs) => {
+  const dateMap = {};
+  for (const job of jobs) {
+    const date = job.date.split("T")[0]; //YYYY-MM-DD
+    dateMap[date] = (dateMap[date] || 0) + 1;
+  }
+  return dateMap;
+});
