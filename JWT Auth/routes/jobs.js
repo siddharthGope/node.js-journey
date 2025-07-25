@@ -21,7 +21,7 @@ router.post("/create-job", verifyToken, async (req, res) => {
 
 //update job
 
-router.put("/:id", verifyToken, async (req, res) => {
+router.put("/update/:id", verifyToken, async (req, res) => {
   const job = await Job.findOneAndUpdate(
     { _id: req.params.id, user: req.user.username },
     req.body,
@@ -33,7 +33,7 @@ router.put("/:id", verifyToken, async (req, res) => {
 
 //delete job
 
-router.delete("/:id", verifyToken, async (req, res) => {
+router.delete("/delete/:id", verifyToken, async (req, res) => {
   const job = await Job.findByIdAndDelete({
     _id: req.params.id,
     user: req.user.username,

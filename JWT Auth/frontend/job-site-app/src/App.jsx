@@ -4,6 +4,7 @@ import Login from './components/Auth/Login';
 import PrivateRoutes from './routing/PrivateRoutes';
 import Dashboard from './components/Protected/Dashboard';
 import Jobs from './components/Protected/Job/Jobs';
+import { logOut } from './services/authService';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
         <nav>
           <Link to="/">Register</Link> |
           <Link to="/login">Login</Link>
+          <button onClick={() => logOut()}>Log out</button>
         </nav>
         <Routes>
           <Route path="/" element={<Register />} />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { login, logOut } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 
 function Login() {
@@ -20,20 +21,27 @@ function Login() {
             setMessage('Login successful')
             navigate('/dashboard')
             runLogOutTimer()
-
-
-            //fetch users as proof
-            // const userRes = await 
         } catch (error) {
             setMessage(error.response?.data?.message || 'Login failed')
         }
     }
 
     function runLogOutTimer() {
-        setTimeout(() => {
-            logOut()
-        }, 5000);
+        const token = localStorage.getItem('token')
+        if (token) {
+            const { exp } = jwtDecode(token)
+
+            const expiryTime = exp * 1000 - Date.now() //millisec
+            console.log(expiryTime);
+
+            const timer = setTimeout(() => {
+                logOut()
+            }, expiryTime)
+            return () => clearTimeout(timer)
+        }
     }
+
+
 
     return (
         <div>
