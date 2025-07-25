@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {
     ArcElement,
@@ -19,9 +18,12 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineEleme
 
 function Dashboard() {
     const dispatch = useDispatch()
+
+
     useEffect(() => {
-        dispatch(getJobs)
+        dispatch(getJobs())
     }, [dispatch]);
+
 
     const jobsByStatus = useSelector(selectJobsByStatus)
     const jobsByDate = useSelector(selectJobsByDate)
