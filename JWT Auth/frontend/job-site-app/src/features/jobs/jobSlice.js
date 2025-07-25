@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getJob } from "../../services/jobServices";
-import { act } from "react";
 
 const BASE_URL = "http://localhost:6200/jobs";
 
@@ -15,23 +13,37 @@ const getAuthHeader = () => ({
 
 //Thunk
 
-export const getJobs = createAsyncThunk("jobs", async () => {
-  const result = await axios.get(BASE_URL, getAuthHeader());
+export const getJobs = createAsyncThunk("/all-jobs", async () => {
+  const result = await axios.post(`${BASE_URL}/all-jobs`, {}, getAuthHeader());
   return result.data;
 });
 
-export const createJob = createAsyncThunk("jobs/create", async (jobData) => {
-  const response = await axios.post(BASE_URL, jobData, getAuthHeader());
+export const createJob = createAsyncThunk("/create-job", async (jobData) => {
+  const response = await axios.post(
+    `${BASE_URL}/create-job`,
+    jobData,
+    getAuthHeader()
+  );
   return response.data;
 });
 
-export const updateJob = createAsyncThunk("jobs/:id", async (id) => {
-  const response = await axios.put(`${BASE_URL}/${id}`, getAuthHeader());
-  return response.data;
-});
+export const updateJob = createAsyncThunk(
+  "/update/:id",
+  async (id, jobData) => {
+    const response = await axios.put(
+      `${BASE_URL}/update/${id}`,
+      jobData,
+      getAuthHeader()
+    );
+    return response.data;
+  }
+);
 
-export const deleteJob = createAsyncThunk("jobs/delete", async (id) => {
-  const response = await axios.delete(`${BASE_URL}/${id}`, getAuthHeader());
+export const deleteJob = createAsyncThunk("/delete/:id", async (id) => {
+  const response = await axios.delete(
+    `${BASE_URL}/delete/${id}`,
+    getAuthHeader()
+  );
   return response.data;
 });
 
@@ -53,7 +65,7 @@ const jobSlice = createSlice({
       .addCase(getJobs.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getJob.fulfilled, (state, action) => {
+      .addCase(getJobs.fulfilled, (state, action) => {
         (state.loading = false), (state.jobs = action.payload);
       })
       .addCase(getJobs.rejected, (state, action) => {

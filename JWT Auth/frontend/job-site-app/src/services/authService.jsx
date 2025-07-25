@@ -16,3 +16,8 @@ export const getUsers = async (token) => {
         }
     })
 }
+
+export const logOut = () => {
+    localStorage.removeItem('token')
+    window.location.href = '/login'
+}

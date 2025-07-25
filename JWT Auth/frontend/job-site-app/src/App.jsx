@@ -3,6 +3,7 @@ import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import PrivateRoutes from './routing/PrivateRoutes';
 import Dashboard from './components/Protected/Dashboard';
+import Jobs from './components/Protected/Job/Jobs';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route element={<PrivateRoutes />}>
             <Route path='/dashboard' element={<Dashboard />}></Route>
+            <Route path='/jobs' element={<Jobs />}></Route>
           </Route>
         </Routes>
       </Router>

@@ -28,7 +28,7 @@ router.put("/:id", verifyToken, async (req, res) => {
     { new: true }
   );
   if (!job) return res.status(404).json({ message: "Job not found" });
-  req.json(job);
+  res.status(200).json(job);
 });
 
 //delete job

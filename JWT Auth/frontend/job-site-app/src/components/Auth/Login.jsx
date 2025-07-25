@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { login } from '../../services/authService';
+import { login, logOut } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -19,12 +19,20 @@ function Login() {
             localStorage.setItem('token', token)
             setMessage('Login successful')
             navigate('/dashboard')
+            runLogOutTimer()
+
 
             //fetch users as proof
             // const userRes = await 
         } catch (error) {
             setMessage(error.response?.data?.message || 'Login failed')
         }
+    }
+
+    function runLogOutTimer() {
+        setTimeout(() => {
+            logOut()
+        }, 5000);
     }
 
     return (
