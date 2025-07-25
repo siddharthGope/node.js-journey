@@ -40,7 +40,7 @@ router.delete("/delete/:id", verifyToken, async (req, res) => {
   });
 
   if (!job) return res.status(404).json({ message: "Job not found" });
-  res.json({ message: "Job deleted" });
+  res.json({ id: req.params.id, message: "Job deleted" });
 });
 
 module.exports = router;

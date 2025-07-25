@@ -32,8 +32,8 @@ export const createJob = createAsyncThunk("/create-job", async (jobData) => {
 });
 
 export const updateJob = createAsyncThunk(
-  "/update/:id",
-  async (id, jobData) => {
+  "/update",
+  async ({ id, ...jobData }) => {
     const response = await axios.put(
       `${BASE_URL}/update/${id}`,
       jobData,
@@ -43,7 +43,7 @@ export const updateJob = createAsyncThunk(
   }
 );
 
-export const deleteJob = createAsyncThunk("/delete/:id", async (id) => {
+export const deleteJob = createAsyncThunk("/delete", async (id) => {
   const response = await axios.delete(
     `${BASE_URL}/delete/${id}`,
     getAuthHeader()
@@ -84,18 +84,16 @@ const jobSlice = createSlice({
       })
 
       //update job
-
       .addCase(updateJob.fulfilled, (state, action) => {
-        const index = state.jobs.findIndex(
-          (job) => job._id === action.payload._id
+        state.jobs = state.jobs.map((job) =>
+          job._id === action.payload._id ? action.payload : job
         );
-        if (index >= 0) return (state.jobs[index] = action.payload);
       })
-
       //delete job
 
       .addCase(deleteJob.fulfilled, (state, action) => {
-        state.jobs = state.jobs.filter((job) => job._id !== action.payload);
+        console.log(action.payload.id);
+        state.jobs = state.jobs.filter((job) => job._id !== action.payload.id);
       });
   },
 });

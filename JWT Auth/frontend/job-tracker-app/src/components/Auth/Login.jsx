@@ -48,6 +48,7 @@ function Login() {
             <h1>Login</h1>
 
             <form onSubmit={handleSubmit}>
+                <label className="block mb-1 text-sm text-gray-600">Notes</label>
                 <input type="text" placeholder='Username' value={loginData.username} onChange={e => setLoginData({ ...loginData, username: e.target.value })} required />
                 <input type="password" placeholder='Password' value={loginData.password} onChange={e => setLoginData({ ...loginData, password: e.target.value })} required />
 

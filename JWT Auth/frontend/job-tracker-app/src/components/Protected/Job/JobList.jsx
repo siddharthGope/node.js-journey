@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteJob, getJobs } from '../../../features/jobs/JobSlice'
 import JobForm from './JobForm'
+import JobCard from './JobCard'
 
 
 function JobList() {
@@ -28,13 +29,9 @@ function JobList() {
             <JobForm onComplete={() => setEditing(null)} editJob={editing} />
 
             <ul>
-                {jobs.map(job => (
-                    <li key={job._id}>
-                        <strong>{job.title}</strong> @ {job.company} ({job.status}) - {job.date} - {job.notes}
+                {jobs && jobs.length > 0 && jobs.map(job => (
+                    <JobCard key={job._id} job={job} onEdit={(job) => setEditing(job)} onDelete={(id) => handleDelete(id)} />
 
-                        <button onClick={() => setEditing(job)}>Edit</button>
-                        <button onClick={() => handleDelete(job._id)}>Delete</button>
-                    </li>
                 ))}
             </ul>
         </div>
